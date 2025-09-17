@@ -13,12 +13,12 @@ public static class CargaDeDatos
         {
             var datos = lineas[i].Split(',');
             if (datos.Length < 4) continue;
-            int id = int.Parse(datos[0]);
-            string nombre = datos[1];
-            string direccion = datos[2];
-            string telefono = datos[3];
-
-            clientes.Add(new Cliente(id, nombre, direccion, telefono));
+            clientes.Add(new Cliente(
+                int.Parse(datos[0]),
+                datos[1],
+                datos[2],
+                datos[3]
+            ));
         }
 
         return clientes;
@@ -33,12 +33,12 @@ public static class CargaDeDatos
         {
             var datos = lineas[i].Split(',');
             if (datos.Length < 4) continue;
-            int id = int.Parse(datos[0]);
-            string nombre = datos[1];
-            string direccion = datos[2];
-            string telefono = datos[3];
-
-            cadetes.Add(new Cadete(id, nombre, direccion, telefono));
+            cadetes.Add(new Cadete(
+                int.Parse(datos[0]),
+                datos[1],
+                datos[2],
+                datos[3]
+            ));
         }
 
         return cadetes;
