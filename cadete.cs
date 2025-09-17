@@ -14,4 +14,19 @@ public class Cadete
         Direccion = direccion;
         Telefono = telefono;
     }
+
+    public string ObtenerNombre()
+    {
+        return Nombre;
+    }
+
+    public string ObtenerDireccion()
+    {
+        return Direccion;
+    }
+
+    public string ObtenerTelefono()
+    {
+        return Telefono;
+    }
 }
