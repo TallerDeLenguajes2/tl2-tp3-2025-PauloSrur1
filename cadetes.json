@@ -1,0 +1,6 @@
+[
+  { "Id": 1, "Nombre": "Carlos López", "Direccion": "Calle 1", "Telefono": "3811111111" },
+  { "Id": 2, "Nombre": "María Díaz", "Direccion": "Calle 2", "Telefono": "3812222222" },
+  { "Id": 3, "Nombre": "Pedro Sánchez", "Direccion": "Calle 3", "Telefono": "3813333333" },
+  { "Id": 6, "Nombre": "Florencia Vega", "Direccion": "Calle 6", "Telefono": "3816666666" }
+]
