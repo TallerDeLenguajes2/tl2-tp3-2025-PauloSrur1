@@ -10,7 +10,6 @@ public class Pedido
     public Cliente Cliente { get; }
     public Cadete? CadeteAsignado { get; set; }
 
-    //constructor
     public Pedido(int id, string observacion, Cliente cliente)
     {
         Id = id;
@@ -18,5 +17,25 @@ public class Pedido
         Cliente = cliente;
         Estado = EstadoPedido.Pendiente;
         CadeteAsignado = null;
+    }
+
+    public string ObtenerObservacion()
+    {
+        return Observacion;
+    }
+
+    public EstadoPedido ObtenerEstado()
+    {
+        return Estado;
+    }
+
+    public string ObtenerNombreCliente()
+    {
+        return Cliente.Nombre;
+    }
+
+    public int? ObtenerIdCadeteAsignado()
+    {
+        return CadeteAsignado?.Id;
     }
 }
