@@ -2,126 +2,119 @@
 
 class Program
 {
-    static void Main()
+    static void Main(string[] args)
     {
-        Console.WriteLine("¿Qué formato de datos desea usar?");
-        Console.WriteLine("1. CSV");
-        Console.WriteLine("2. JSON");
-        Console.Write("Opción: ");
-        var formato = Console.ReadLine();
+        // Selección de tipo de acceso a datos
+        Console.WriteLine("Seleccione el tipo de acceso a datos: 1-CSV, 2-JSON");
+        var opcion = Console.ReadLine();
 
         IAccesoADatos accesoADatos;
-        if (formato == "2")
+        if (opcion == "2")
+        {
             accesoADatos = new AccesoADatosJSON("clientes.json", "cadetes.json");
+        }
         else
+        {
             accesoADatos = new AccesoADatosCSV("clientes.csv", "cadetes.csv");
+        }
 
+        // Cargar datos
         var clientes = accesoADatos.LeerClientes();
         var cadetes = accesoADatos.LeerCadetes();
-        Cadeteria cadeteria = new Cadeteria("Cadetería Express", "3814440000", cadetes);
+
+        // Crear la cadetería
+        var cadeteria = new Cadeteria("Cadetería Ejemplo", "3815555555", cadetes);
+
+        int idPedido = 1;
 
         while (true)
         {
-            Console.WriteLine("\n1. Alta pedido");
+            Console.WriteLine("\n--- Menú Cadetería ---");
+            Console.WriteLine("1. Dar de alta pedido");
             Console.WriteLine("2. Asignar pedido a cadete");
             Console.WriteLine("3. Cambiar estado de pedido");
-            Console.WriteLine("4. Reasignar pedido");
-            Console.WriteLine("5. Jornal a cobrar por cadete");
-            Console.WriteLine("6. Listar clientes");
-            Console.WriteLine("7. Listar cadetes");
-            Console.WriteLine("8. Listar pedidos");
+            Console.WriteLine("4. Mostrar informe de cadetes");
             Console.WriteLine("0. Salir");
-            Console.Write("Opción: ");
-            var op = Console.ReadLine();
+            Console.Write("Seleccione una opción: ");
+            var menu = Console.ReadLine();
 
-            if (op == "0") break;
+            if (menu == "0") break;
 
-            switch (op)
+            switch (menu)
             {
                 case "1":
-                    Console.Write("Id pedido: ");
-                    int idPedido = int.Parse(Console.ReadLine()!);
-                    Console.Write("Observación: ");
-                    string obs = Console.ReadLine()!;
-                    Console.WriteLine("Clientes:");
-                    foreach (var c in clientes) Console.WriteLine($"{c.Id}: {c.Nombre}");
-                    Console.Write("Id cliente: ");
-                    int idCliente = int.Parse(Console.ReadLine()!);
-                    var cliente = clientes.FirstOrDefault(c => c.Id == idCliente);
-                    if (cliente != null)
+                    // Alta de pedido
+                  
+
+                    Console.WriteLine("Seleccione cliente por ID:");
+                    foreach (var cliente in clientes)
+                        Console.WriteLine($"{cliente.Id}: {cliente.Nombre}");
+                    int idCliente = int.Parse(Console.ReadLine() ?? "0");
+                    var clienteSel = clientes.Find(c => c.Id == idCliente);
+                    if (clienteSel == null)
                     {
-                        cadeteria.AgregarPedido(new Pedido(idPedido, obs, cliente));
-                        Console.WriteLine("Pedido agregado.");
+                        Console.WriteLine("Cliente no encontrado.");
+                        break;
                     }
-                    else Console.WriteLine("Cliente no encontrado.");
+                    var pedido = new Pedido(idPedido++, clienteSel);
+                    cadeteria.AgregarPedido(pedido);
+                    Console.WriteLine("Pedido agregado.");
                     break;
+
                 case "2":
-                    Console.Write("Id pedido: ");
-                    int idP = int.Parse(Console.ReadLine()!);
-                    Console.WriteLine("Cadetes:");
-                    foreach (var cad in cadetes) Console.WriteLine($"{cad.Id}: {cad.Nombre}");
-                    Console.Write("Id cadete: ");
-                    int idC = int.Parse(Console.ReadLine()!);
-                    if (cadeteria.AsignarCadeteAPedido(idC, idP))
-                        Console.WriteLine("Pedido asignado.");
-                    else
-                        Console.WriteLine("Error al asignar pedido.");
-                    break;
-                case "3":
-                    Console.Write("Id pedido: ");
-                    int idPC = int.Parse(Console.ReadLine()!);
-                    Console.WriteLine("Estados: 0-Pendiente 1-Entregado 2-Cancelado");
-                    int est = int.Parse(Console.ReadLine()!);
-                    var pedido = cadeteria.Pedidos.FirstOrDefault(p => p.Id == idPC);
-                    if (pedido != null)
-                    {
-                        pedido.Estado = (EstadoPedido)est;
-                        Console.WriteLine("Estado cambiado.");
-                    }
-                    else
-                        Console.WriteLine("Pedido no encontrado.");
-                    break;
-                case "4":
-                    Console.Write("Id pedido: ");
-                    int idPR = int.Parse(Console.ReadLine()!);
-                    Console.WriteLine("Cadetes:");
-                    foreach (var cad in cadetes) Console.WriteLine($"{cad.Id}: {cad.Nombre}");
-                    Console.Write("Nuevo id cadete: ");
-                    int idCN = int.Parse(Console.ReadLine()!);
-                    if (cadeteria.AsignarCadeteAPedido(idCN, idPR))
-                        Console.WriteLine("Pedido reasignado.");
-                    else
-                        Console.WriteLine("Error al reasignar pedido.");
-                    break;
-                case "5":
-                    Console.WriteLine("Cadetes:");
-                    foreach (var cad in cadetes) Console.WriteLine($"{cad.Id}: {cad.Nombre}");
-                    Console.Write("Id cadete para calcular jornal: ");
-                    int idJC = int.Parse(Console.ReadLine()!);
-                    double jornal = cadeteria.JornalACobrar(idJC);
-                    Console.WriteLine($"Jornal a cobrar: ${jornal}");
-                    break;
-                case "6":
-                    Console.WriteLine("=== LISTA DE CLIENTES ===");
-                    foreach (var clienteL in clientes)
-                        Console.WriteLine($"{clienteL.Id}: {clienteL.Nombre} - {clienteL.Direccion} - {clienteL.Telefono}");
-                    break;
-                case "7":
-                    Console.WriteLine("=== LISTA DE CADETES ===");
-                    foreach (var cadeteL in cadetes)
-                        Console.WriteLine($"{cadeteL.Id}: {cadeteL.Nombre} - {cadeteL.Direccion} - {cadeteL.Telefono}");
-                    break;
-                case "8":
-                    Console.WriteLine("=== LISTA DE PEDIDOS ===");
+                    // Asignar pedido a cadete
+                    Console.WriteLine("Seleccione pedido por ID:");
                     foreach (var p in cadeteria.Pedidos)
+                        Console.WriteLine($"{p.Id}:  (Estado: {p.Estado})");
+                    int idPed = int.Parse(Console.ReadLine() ?? "0");
+                    Console.WriteLine("Seleccione cadete por ID:");
+                    foreach (var cad in cadetes)
+                        Console.WriteLine($"{cad.Id}: {cad.Nombre}");
+                    int idCad = int.Parse(Console.ReadLine() ?? "0");
+                    bool asignado = cadeteria.AsignarCadeteAPedido(idCad, idPed);
+                    Console.WriteLine(asignado ? "Pedido asignado." : "No se pudo asignar.");
+                    break;
+
+                case "3":
+                    // Cambiar estado de pedido
+                    Console.WriteLine("Seleccione pedido por ID:");
+                    foreach (var p in cadeteria.Pedidos)
+                        Console.WriteLine($"{p.Id}: (Estado: {p.Estado})");
+                    int idPedEstado = int.Parse(Console.ReadLine() ?? "0");
+                    var pedidoEstado = cadeteria.Pedidos.Find(p => p.Id == idPedEstado);
+                    if (pedidoEstado == null)
                     {
-                        Console.WriteLine($"Id: {p.Id}, Cliente: {p.Cliente.Nombre}, Estado: {p.Estado}, Cadete: {(p.CadeteAsignado != null ? p.CadeteAsignado.Nombre : "Sin asignar")}");
+                        Console.WriteLine("Pedido no encontrado.");
+                        break;
+                    }
+                    Console.WriteLine("Seleccione nuevo estado: 1-Pendiente, 2-Entregado, 3-Cancelado");
+                    var est = Console.ReadLine();
+                    switch (est)
+                    {
+                        case "1": pedidoEstado.Estado = EstadoPedido.Pendiente; break;
+                        case "2": pedidoEstado.Estado = EstadoPedido.Entregado; break;
+                        case "3": pedidoEstado.Estado = EstadoPedido.Cancelado; break;
+                        default: Console.WriteLine("Estado inválido."); break;
+                    }
+                    Console.WriteLine("Estado actualizado.");
+                    break;
+
+                case "4":
+                    // Informe de cadetes
+                    var informe = cadeteria.ObtenerInformeCadetes();
+                    Console.WriteLine("\n--- Informe de Cadetes ---");
+                    foreach (var item in informe)
+                    {
+                        Console.WriteLine($"Cadete: {item.NombreCadete} | Pedidos entregados: {item.CantidadPedidos} | Monto ganado: ${item.MontoGanado}");
                     }
                     break;
+
                 default:
                     Console.WriteLine("Opción inválida.");
                     break;
             }
         }
+
+        Console.WriteLine("Programa finalizado.");
     }
 }
