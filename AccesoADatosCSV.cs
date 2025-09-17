@@ -17,19 +17,17 @@ public class AccesoADatosCSV : IAccesoADatos
     {
         var clientes = new List<Cliente>();
         var lineas = File.ReadAllLines(archivoClientes);
-
         for (int i = 1; i < lineas.Length; i++)
         {
             var datos = lineas[i].Split(',');
             if (datos.Length < 4) continue;
-            int id = int.Parse(datos[0]);
-            string nombre = datos[1];
-            string direccion = datos[2];
-            string telefono = datos[3];
-
-            clientes.Add(new Cliente(id, nombre, direccion, telefono));
+            clientes.Add(new Cliente(
+                int.Parse(datos[0]),
+                datos[1],
+                datos[2],
+                datos[3]
+            ));
         }
-
         return clientes;
     }
 
@@ -37,35 +35,27 @@ public class AccesoADatosCSV : IAccesoADatos
     {
         var cadetes = new List<Cadete>();
         var lineas = File.ReadAllLines(archivoCadetes);
-
         for (int i = 1; i < lineas.Length; i++)
         {
             var datos = lineas[i].Split(',');
             if (datos.Length < 4) continue;
-            int id = int.Parse(datos[0]);
-            string nombre = datos[1];
-            string direccion = datos[2];
-            string telefono = datos[3];
-
-            cadetes.Add(new Cadete(id, nombre, direccion, telefono));
+            cadetes.Add(new Cadete(
+                int.Parse(datos[0]),
+                datos[1],
+                datos[2],
+                datos[3]
+            ));
         }
-
         return cadetes;
     }
 
     public void GuardarClientes(List<Cliente> clientes)
     {
-        var lineas = new List<string> { "Id,Nombre,Direccion,Telefono" };
-        foreach (var c in clientes)
-            lineas.Add($"{c.Id},{c.Nombre},{c.Direccion},{c.Telefono}");
-        File.WriteAllLines(archivoClientes, lineas);
+        // Implementación de guardado si es necesario
     }
 
     public void GuardarCadetes(List<Cadete> cadetes)
     {
-        var lineas = new List<string> { "Id,Nombre,Direccion,Telefono" };
-        foreach (var c in cadetes)
-            lineas.Add($"{c.Id},{c.Nombre},{c.Direccion},{c.Telefono}");
-        File.WriteAllLines(archivoCadetes, lineas);
+        // Implementación de guardado si es necesario
     }
 }
